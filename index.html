@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>前端项目集成工具 project-hub</title>
+<link rel="stylesheet" type="text/css" href="./src/css/style.css">
+<meta name="author" content="DH">
+</head>
+<body>
+<div id="app" class='app'>
+  <div class="main">
+    <div class="menu">
+      <span class="btn-add btn-bd-r" @click="openModify()" title="添加"></span>
+      <span class="btn-help btn-bd-r" title="帮助"></span>
+      <span class="btn-other"></span>
+    </div>
+    <ul class="list">
+      <li v-for="o in appData.list" @click="openModify(o.id)">
+        <span class="icon icon-folder ml10"></span>
+        <span class="title">{{o.title}}</span>
+        <span class="icon-large pointer icon-play" title="开发" @click.stop.prevent="task(o.id,'cmd_dev')"></span>
+        <span class="icon-large pointer icon-kill" title="停止" @click.stop.prevent="close(o.id)"></span>
+        <span class="icon-large pointer icon-package" title="打包" @click.stop.prevent="task(o.id,'cmd_build')"></span>
+        <span class="icon-large pointer icon-delete" title="移除项目" @click.stop.prevent="del(o.id)"></span>
+      </li>
+    </ul>
+
+    <div :class="['modify-wrap',showModify?'on':'']">
+        <div class="title">{{formData.id?'Modify':'Add'}}</div>
+        <div class="form">
+          <div class="item">
+              <label>项目名:</label>
+              <input type="text" v-model="formData.title">
+          </div>
+          <div class="item">
+              <label>路径:</label>
+              <div class="file-box">
+                <input class="input-file" type="file" @change="getFilePath($event)" webkitdirectory directory/>
+                <input class="input-mask" v-model="formData.filePath" readonly></input>
+              </div>
+          </div>
+          <div class="item">
+              <label>启动命令:</label>
+              <input type="text" v-model="formData.cmd_dev">
+          </div>
+          <div class="item">
+              <label>打包命令:</label>
+              <input type="text" v-model="formData.cmd_build">
+          </div>
+          <div class="btns">
+            <button @click="saveModify(formData.id?formData.id:'')" class="btn-save">保存</button>
+            <button @click="cancelModify" class="btn-cancel">取消</button>
+          </div>
+        </div>
+    </div>
+    <div class="mask" v-show="showModify" @click="cancelModify"></div>
+  </div>
+
+  <div class="process">
+    <div v-html="processData"></div>
+    <div id="bottomLine" class="bottom-line"></div>
+  </div>
+
+  <div class="wrap-input">
+    <input v-model="input_cmd" type="text" @keyup.enter="task()" placeholder="cmd ...">
+  </div>
+
+</div>
+
+</body>
+<script src="./src/js/vue.min.js" charset="UTF-8"></script>
+<script src="./src/js/renderer.js" charset="UTF-8"></script>
+</html>
