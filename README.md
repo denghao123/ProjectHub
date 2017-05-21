@@ -5,7 +5,7 @@
 ![project-hub1.jpg][1]
 
 ##### 安装步骤：
-    npm istall
+    npm i
 	npm start
 
 ##### 2017.5.21 更新：
