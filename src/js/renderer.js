@@ -1,5 +1,8 @@
 ﻿var cp = require('child_process');
 var iconv = require('iconv-lite');
+var {
+  shell
+} = require('electron');
 var vm = new Vue({
   el: "#app",
   data: {
@@ -23,6 +26,7 @@ var vm = new Vue({
     let _this = this;
     this.getAllData();
 
+    // error捕获
     process.on('uncaughtException', function(error) {
       _this.displayProcess(error, 'error');
     });
@@ -64,13 +68,10 @@ var vm = new Vue({
       var cmd = "";
       var filePath = "";
       var list = this.appData.list;
-      if (!id) {
-        cmd = this.input_cmd;
-      } else {
-        for (var i in list) {
-          if (id === list[i].id) {
-            cmd = "cd/d " + list[i].filePath + "&&" + list[i][way];
-          }
+
+      for (var i in list) {
+        if (id === list[i].id) {
+          cmd = "cd/d " + list[i].filePath + "&&" + list[i][way];
         }
       }
 
@@ -112,7 +113,6 @@ var vm = new Vue({
         if (stderr) _this.displayProcess(stderr, 'error');
         if (error) _this.displayProcess(error, 'error');
       });
-
     },
 
     // 展示结果
@@ -200,6 +200,15 @@ var vm = new Vue({
       this.showModify = !this.showModify;
     },
 
+    // 新开cmd窗口
+    openCmd() {
+      cp.exec("start cmd /k");
+      this.displayProcess("start cmd", 'done');
+    },
+
+    clearProcessInfo() {
+      this.processData = '';
+    },
 
     /*
      *克隆对象
@@ -217,6 +226,11 @@ var vm = new Vue({
      */
     cancelModify() {
       this.toggleShow();
+    },
+
+    // 打开浏览器
+    openWebUrl(url) {
+      shell.openExternal(url);
     },
 
     /*

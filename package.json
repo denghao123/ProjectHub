@@ -6,7 +6,7 @@
     "main": "main.js",
     "scripts": {
         "start": "electron .",
-        "packager": "electron-packager . hub --platform win32 --overwrite --out ../app  --icon=./src/image/icon.ico"
+        "packager": "electron-packager . projectHub --platform win32 --overwrite --out ../app  --icon=./src/image/icon.ico"
     },
     "license": "",
     "devDependencies": {

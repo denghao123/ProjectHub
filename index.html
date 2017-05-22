@@ -11,7 +11,7 @@
   <div class="main">
     <div class="menu">
       <span class="btn-add btn-bd-r" @click="openModify()" title="添加"></span>
-      <span class="btn-help btn-bd-r" title="帮助"></span>
+      <span class="btn-help btn-bd-r" @click="openWebUrl('http://denghao.me/index.php/archives/project-hub.html')" title="帮助"></span>
       <span class="btn-other"></span>
     </div>
     <ul class="list">
@@ -58,12 +58,12 @@
   </div>
 
   <div class="process">
+    <div class="btns">
+      <span class="mr4" title="命令行" @click="openCmd()">cmd</span>
+      <span title="清除" @click="clearProcessInfo()">clear</span>
+    </div>
     <div v-html="processData"></div>
     <div id="bottomLine" class="bottom-line"></div>
-  </div>
-
-  <div class="wrap-input">
-    <input v-model="input_cmd" type="text" @keyup.enter="task()" placeholder="cmd ...">
   </div>
 
 </div>
