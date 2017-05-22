@@ -43,7 +43,7 @@ var vm = new Vue({
      *选择项目地址
      */
     getFilePath(e) {
-      for (let f of e.target.files) {
+      for (var f of e.target.files) {
         this.formData.filePath = f.path;
       }
     },
@@ -97,7 +97,7 @@ var vm = new Vue({
         return;
       }
 
-      let cmd='taskkill /PID '+_this.chirdren.pid+' /T /F';
+      let cmd = 'taskkill /PID ' + _this.chirdren.pid + ' /T /F';
 
       cp.exec(cmd, function(error, stdout, stderr) {
         if (stdout) _this.displayProcess("[process closed!]", 'done');
@@ -110,7 +110,7 @@ var vm = new Vue({
     // 展示结果
     displayProcess(str, type) {
       this.scrollToBottom();
-      let s=str.toString();
+      let s = str.toString();
       switch (type) {
         case 'error':
           this.processData += '<div class="c-red">' + this.gbk(s) + '</div>';
@@ -150,7 +150,13 @@ var vm = new Vue({
           }
         }
       } else {
-        this.formData = {}
+        this.formData = {
+          id: '',
+          title: '',
+          filePath: '',
+          cmd_dev: '',
+          cmd_build: ''
+        }
       }
       this.toggleShow();
     },

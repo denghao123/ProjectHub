@@ -1,18 +1,18 @@
 {
-  "name": "project-hub",
-  "version": "1.0.0",
-  "author": "DH",
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron .",
-    "packager":"electron-packager . hub --platform win32 --overwrite --out ../app --version 1.6.8 --icon=./src/image/icon.ico"
-  },
-  "license": "",
-  "devDependencies": {
-    "electron": "~1.6.2"
-  },
-  "dependencies": {
-    "iconv-lite": "^0.4.17"
-  }
+    "name": "project-hub",
+    "version": "1.0.0",
+    "author": "DH",
+    "description": "",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "packager": "electron-packager . hub --platform win32 --overwrite --out ../app  --icon=./src/image/icon.ico"
+    },
+    "license": "",
+    "devDependencies": {
+        "electron": "~1.6.2"
+    },
+    "dependencies": {
+        "iconv-lite": "^0.4.17"
+    }
 }
