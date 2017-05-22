@@ -157,6 +157,9 @@ body {
 .icon-folder{
     background: url(../image/icon_folder.png) center no-repeat;
 }
+.icon-menu{
+    background: url(../image/icon_menu.png) center no-repeat;
+}
 .icon-play{
     background: url(../image/icon_play.png) center no-repeat;
     background-size: 57%;

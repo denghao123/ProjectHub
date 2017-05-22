@@ -49,6 +49,14 @@ var vm = new Vue({
     },
 
     /*
+     * 打开目录
+     */
+    openFolder(path) {
+      cp.exec('explorer ' + path);
+      this.displayProcess('open folder: ' + path, 'done');
+    },
+
+    /*
      *执行cmd
      */
     task(id, way) {
