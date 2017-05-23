@@ -243,7 +243,6 @@ var vm = new Vue({
      *中文乱码问题
      */
     gbk(str, char) {
-      console.log(str)
       return iconv.decode(new Buffer(str, 'binary'), char || 'utf-8');
     },
 
