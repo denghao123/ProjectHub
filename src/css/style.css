@@ -30,6 +30,9 @@ body {
 .pointer{
     cursor: pointer;
 }
+.drag{
+    cursor: move;
+}
 .c-red{
     color: red;
 }

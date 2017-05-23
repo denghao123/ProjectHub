@@ -15,15 +15,17 @@
       <span class="btn-other"></span>
     </div>
     <ul class="list">
-      <li v-for="o in appData.list" @click="openModify(o.id)">
-        <span class="icon icon-menu ml10"></span>
-        <span class="title">{{o.title}}</span>
-        <span class="icon-large pointer icon-folder" title="打开文件位置" @click.stop.prevent="openFolder(o.filePath)"></span>
-        <span class="icon-large pointer icon-play" title="运行" @click.stop.prevent="task(o.id,'cmd_dev')"></span>
-        <span class="icon-large pointer icon-kill" title="停止" @click.stop.prevent="close(o.id)"></span>
-        <span class="icon-large pointer icon-package" title="打包" @click.stop.prevent="task(o.id,'cmd_build')"></span>
-        <span class="icon-large pointer icon-delete" title="移除项目" @click.stop.prevent="del(o.id)"></span>
-      </li>
+      <draggable v-model="appData.list" @start="drag=true" @end="onDrag">
+        <li v-for="o in appData.list" @click="openModify(o.id)">
+          <span class="icon icon-menu ml10 drag"></span>
+          <span class="title">{{o.title}}</span>
+          <span class="icon-large pointer icon-folder" title="打开文件位置" @click.stop.prevent="openFolder(o.filePath)"></span>
+          <span class="icon-large pointer icon-play" title="运行" @click.stop.prevent="task(o.id,'cmd_dev')"></span>
+          <span class="icon-large pointer icon-kill" title="停止" @click.stop.prevent="close(o.id)"></span>
+          <span class="icon-large pointer icon-package" title="打包" @click.stop.prevent="task(o.id,'cmd_build')"></span>
+          <span class="icon-large pointer icon-delete" title="移除项目" @click.stop.prevent="del(o.id)"></span>
+        </li>
+      </draggable>
     </ul>
 
     <div :class="['modify-wrap',showModify?'on':'']">
@@ -69,6 +71,6 @@
 </div>
 
 </body>
-<script src="./src/js/vue.min.js" charset="UTF-8"></script>
-<script src="./src/js/renderer.js" charset="UTF-8"></script>
+<script src="./src/js/vue.min.js"></script>
+<script src="./src/js/renderer.js"></script>
 </html>

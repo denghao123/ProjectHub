@@ -1,8 +1,10 @@
 ﻿var cp = require('child_process');
 var iconv = require('iconv-lite');
+var draggable = require('vuedraggable');
 var {
   shell
 } = require('electron');
+
 var vm = new Vue({
   el: "#app",
   data: {
@@ -41,6 +43,12 @@ var vm = new Vue({
       this.appData = JSON.parse(localStorage.getItem("data")) || {
         list: []
       };
+    },
+
+    //拖动换位
+    onDrag(e) {
+      drag = false;
+      localStorage.setItem("data", JSON.stringify(this.appData));
     },
 
     /*
@@ -278,6 +286,8 @@ var vm = new Vue({
         typeof callback === "function" && callback();
       }, (time ? time : 1500));
     }
-
+  },
+  components: {
+    draggable
   }
 });
