@@ -30,7 +30,7 @@ var vm = new Vue({
 
     // error捕获
     process.on('uncaughtException', function(error) {
-      _this.displayProcess("[errer caught]" + this.gbk(error), 'error');
+      _this.displayProcess("[error caught]" + this.gbk(error), 'error');
     });
   },
 
