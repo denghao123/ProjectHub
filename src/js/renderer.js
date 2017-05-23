@@ -30,7 +30,7 @@ var vm = new Vue({
 
     // error捕获
     process.on('uncaughtException', function(error) {
-      _this.displayProcess(error, 'error');
+      _this.displayProcess("[errer caught]" + this.gbk(error), 'error');
     });
   },
 
@@ -89,12 +89,10 @@ var vm = new Vue({
       });
 
       _this.chirdren.stdout.on('data', (data) => {
-        console.log('ok')
         _this.displayProcess(data);
       })
 
       _this.chirdren.stderr.on('data', (data) => {
-        console.log('error')
         _this.displayProcess(data, 'error');
       })
 
@@ -107,7 +105,6 @@ var vm = new Vue({
     // 关闭进程
     close(id) {
       var _this = this;
-      console.log(_this.chirdren.pid);
 
       if (!_this.chirdren.pid) {
         _this.displayProcess('sorry! process pid missed.', 'error');
@@ -116,26 +113,27 @@ var vm = new Vue({
 
       let cmd = 'taskkill /PID ' + _this.chirdren.pid + ' /T /F';
 
-      cp.exec(cmd, function(error, stdout, stderr) {
-        if (stdout) _this.displayProcess("[process closed!]", 'done');
-        if (stderr) _this.displayProcess(stderr, 'error');
-        if (error) _this.displayProcess(error, 'error');
+      let child_close = cp.exec(cmd, {
+        encoding: "binary"
+      }, function(error, stdout, stderr) {
+        if (stdout) _this.displayProcess("[process closed!]", 'done', 'gb2312');
+        if (stderr) _this.displayProcess(stderr, 'error', 'gb2312');
       });
     },
 
     // 展示结果
-    displayProcess(str, type) {
+    displayProcess(str, type, char) {
       this.scrollToBottom();
       let s = str.toString();
       switch (type) {
         case 'error':
-          this.processData += '<div class="c-red">' + this.gbk(s) + '</div>';
+          this.processData += '<div class="c-red">' + this.gbk(s, char) + '</div>';
           break;
         case 'done':
-          this.processData += '<div class="c-green">' + this.gbk(s) + '</div>';
+          this.processData += '<div class="c-green">' + this.gbk(s, char) + '</div>';
           break;
         default:
-          this.processData += this.gbk(s) + '<br>';
+          this.processData += this.gbk(s, char) + '<br>';
           break;
       }
     },
@@ -244,8 +242,9 @@ var vm = new Vue({
     /*
      *中文乱码问题
      */
-    gbk(str) {
-      return iconv.decode(new Buffer(str, 'binary'), 'gbk');
+    gbk(str, char) {
+      console.log(str)
+      return iconv.decode(new Buffer(str, 'binary'), char || 'utf-8');
     },
 
     /*
