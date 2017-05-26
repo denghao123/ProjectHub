@@ -8,9 +8,23 @@ body,html {
 }
 
 body {
+    color: #333;
     font-size: 14px;
     transform:translateZ(0);
     -webkit-transform:translateZ(0);
+}
+ul,li{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.vt{
+    vertical-align: top;
+    align-self: flex-start;
+}
+.vm{
+    vertical-align: middle;
+    align-self: center;
 }
 .ml4{
     margin-left: 4px;
@@ -154,7 +168,7 @@ body {
 }
 
 .list li.active,.list li:hover {
-    background-color: #DCECF5;
+    background-color: #E4F1F8;
 }
 
 .icon{
@@ -202,18 +216,31 @@ body {
     background: url(../image/icon_cmd.png) center no-repeat;
 }
 
+.other-cmd{
+    margin-right: 20px;
+    font-size: 12px;
+}
+.other-cmd>span{
+    color: #3EADF1;
+    margin: 0 6px;
+}
+.other-cmd>span:hover{
+    text-decoration: underline;
+}
+
 .modify-wrap {
     position: absolute;
     right: 0;
     top: 0;
     padding:0 14px; 
-    width: 300px;
+    width: 460px;
     height: 100%;
+    overflow-y: auto;
     background-color: #575C60;
     -webkit-transition: all .3s ease;
     transition: all .3s ease;
     z-index: 3;
-    transform: translate(340px,0);
+    transform: translate(500px,0);
     color: #efefef;
 }
 
@@ -226,7 +253,7 @@ body {
     font-size: 20px;
 }
 .modify-wrap .form{
-    margin-top: 10px;
+    margin: 10px 0;
 }
 .modify-wrap .item{
     display: flex;
@@ -264,8 +291,44 @@ body {
     z-index: 3;
 }
 
+.modify-wrap .item-other-cmd{
+    margin-top: 6px;
+    display: flex;
+    border-top:1px solid #4B5054;
+}
+.modify-wrap .item-other-cmd ul{
+    flex: 1;
+}
+.modify-wrap .item-other-cmd li{
+    flex: 1;
+    margin-bottom: 8px;
+    display: flex;
+}
+.modify-wrap .item-other-cmd .btn-add,.modify-wrap .item-other-cmd .btn-cancel{
+    padding: 3px 6px;
+    border:none;
+    cursor: pointer;
+    border-radius: 2px;
+    color: #b2b9bb;
+    background-color: #2a2c2d;
+}
+.modify-wrap .item-other-cmd input{
+    height: 22px;
+    text-indent: 8px;
+    background-color: #d8d8d8;
+    border: none;
+    border-radius: 2px;
+}
+.modify-wrap .item-other-cmd .input-name{
+    flex: none;
+    width: 100px;
+}
+.modify-wrap .item-other-cmd .input-cmd{
+    flex: 1;
+    margin-left: 10px;
+}
 .modify-wrap .btns{
-    margin-top: 20px;
+    margin-top: 14px;
     text-align: right;
 }
 .modify-wrap .btns button{
@@ -276,7 +339,6 @@ body {
     border-radius: 2px;
     cursor: pointer;
 }
-
 
 .mask{
     position: absolute;

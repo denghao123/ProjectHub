@@ -17,7 +17,8 @@ var vm = new Vue({
       title: '',
       filePath: '',
       cmd_dev: '',
-      cmd_build: ''
+      cmd_build: '',
+      otherCommand: []
     },
     processData: '',
     input_cmd: '',
@@ -25,6 +26,25 @@ var vm = new Vue({
     chirdren: {}
   },
   mounted() {
+    // 测试
+    // let temp = {
+    //   "list": [{
+    //     "id": 1495525103,
+    //     "title": "rrkd-static-h5",
+    //     "filePath": "E:\\project\\rrkd-static-h5",
+    //     "cmd_dev": "npm run dev",
+    //     "cmd_build": "npm run build",
+    //     "otherCommand": [{
+    //       "name": '自定义1',
+    //       "command": 'node -v'
+    //     }, {
+    //       "name": '自定义2',
+    //       "command": 'npm -v'
+    //     }]
+    //   }]
+    // }
+    // localStorage.setItem("data", JSON.stringify(temp));
+
     let _this = this;
     this.getAllData();
 
@@ -71,17 +91,9 @@ var vm = new Vue({
     /*
      *执行cmd
      */
-    task(id, way) {
-      var _this = this;
-      var cmd = "";
-      var filePath = "";
-      var list = this.appData.list;
-
-      for (var i in list) {
-        if (id === list[i].id) {
-          cmd = "cd/d " + list[i].filePath + "&&" + list[i][way];
-        }
-      }
+    task(path, command) {
+      var _this = this,
+        cmd = "cd/d " + path + "&&" + command;
 
       // eg:  'start cmd /k "cd/d f:\\project\\AI-chat&&gulp"';
       this.chirdren = cp.exec(cmd, {
@@ -93,7 +105,7 @@ var vm = new Vue({
       })
 
       _this.chirdren.stderr.on('data', (data) => {
-        _this.displayProcess(data, 'error');
+        _this.displayProcess(data, 'error', 'gb2312');
       })
 
       _this.chirdren.on('exit', (code) => {
@@ -169,37 +181,81 @@ var vm = new Vue({
           title: '',
           filePath: '',
           cmd_dev: '',
-          cmd_build: ''
+          cmd_build: '',
+          otherCommand: []
         }
       }
       this.toggleShow();
+    },
+
+    // 添加自定义cmd
+    addOtherCmd() {
+      var cmds = this.formData.otherCommand;
+
+      if (cmds.length < 4) {
+        cmds.push({
+          name: "",
+          command: ""
+        })
+      } else {
+        this.toast("最多添加4条！");
+      }
+    },
+
+    // 删除自宝义cmd
+    delOtherCmd(index) {
+      var cmds = this.formData.otherCommand;
+      cmds.splice(index, 1);
     },
 
     /*
      *保存modify
      */
     saveModify(id) {
+      // check
+      var form = this.formCheck(this.formData);
+      if (!form) return;
 
-      if (!this.formData.title) {
+      var list = this.appData.list;
+
+      if (id) {
+        for (var i in list) {
+          if (id === list[i].id) {
+            list[i] = form;
+          }
+        }
+      } else {
+        form.id = Date.parse(new Date()) / 1000;
+        list.push(form);
+      }
+
+      this.currData = form;
+      this.toggleShow();
+      localStorage.setItem("data", JSON.stringify(this.appData));
+    },
+
+    // form check
+    formCheck(obj) {
+      if (!obj.title) {
         this.toast("项目名称必填！");
         return;
       }
 
-      var list = this.appData.list;
-      if (id) {
-        for (var i in list) {
-          if (id === list[i].id) {
-            list[i] = this.formData;
-          }
-        }
-      } else {
-        this.formData.id = Date.parse(new Date()) / 1000;
-        list.push(this.formData);
+      if (!obj.filePath) {
+        this.toast("项目路径必填！");
+        return;
       }
 
-      this.currData = this.formData;
-      this.toggleShow();
-      localStorage.setItem("data", JSON.stringify(this.appData));
+      var cmdEmpty = obj.otherCommand.some(function(v, index, arr) {
+        return !(v.name && v.command);
+      })
+
+      if (cmdEmpty) {
+        this.toast("自定义指令填写不完整！");
+        return;
+      }
+
+      return obj;
     },
 
     toggleShow() {
@@ -217,14 +273,30 @@ var vm = new Vue({
     },
 
     /*
-     *克隆对象
+     * 克隆对象
      */
     copy(obj) {
-      var r = {};
-      for (var key in obj) {
-        r[key] = typeof obj[key] === 'object' ? this.copy(obj[key]) : obj[key];
+      var o;
+      if (typeof obj == "object") {
+        if (obj === null) {
+          o = null;
+        } else {
+          if (obj instanceof Array) {
+            o = [];
+            for (var i = 0, len = obj.length; i < len; i++) {
+              o.push(this.copy(obj[i]));
+            }
+          } else {
+            o = {};
+            for (var j in obj) {
+              o[j] = this.copy(obj[j]);
+            }
+          }
+        }
+      } else {
+        o = obj;
       }
-      return r;
+      return o;
     },
 
     /*
@@ -282,7 +354,7 @@ var vm = new Vue({
       setTimeout(function() {
         document.body.removeChild(box);
         typeof callback === "function" && callback();
-      }, (time ? time : 1500));
+      }, (time ? time : 1000));
     }
   },
   components: {

@@ -19,16 +19,20 @@
         <li v-for="o in appData.list" @click="openModify(o.id)">
           <span class="icon icon-menu ml10 drag"></span>
           <span class="title">{{o.title}}</span>
+          <span class="other-cmd">
+              <span v-for="item in o.otherCommand" :title="item.name" @click.stop.prevent="task(o.filePath,item.command)">{{item.name}}</span>
+          </span>
           <span class="icon-large pointer icon-folder" title="打开文件位置" @click.stop.prevent="openFolder(o.filePath)"></span>
-          <span class="icon-large pointer icon-play" title="运行" @click.stop.prevent="task(o.id,'cmd_dev')"></span>
+          <span class="icon-large pointer icon-play" title="运行" @click.stop.prevent="task(o.filePath,o.cmd_dev)"></span>
+          <span class="icon-large pointer icon-package" title="打包" @click.stop.prevent="task(o.filePath,o.cmd_build)"></span>
           <span class="icon-large pointer icon-kill" title="停止" @click.stop.prevent="close(o.id)"></span>
-          <span class="icon-large pointer icon-package" title="打包" @click.stop.prevent="task(o.id,'cmd_build')"></span>
           <span class="icon-large pointer icon-delete" title="移除项目" @click.stop.prevent="del(o.id)"></span>
         </li>
       </draggable>
     </ul>
 
     <div :class="['modify-wrap',showModify?'on':'']">
+    <!-- <div class="modify-wrap on"> -->
         <div class="title">{{formData.id?'Modify':'Add'}}</div>
         <div class="form">
           <div class="item">
@@ -49,6 +53,17 @@
           <div class="item">
               <label>打包命令:</label>
               <input type="text" v-model="formData.cmd_build">
+          </div>
+          <div class="item item-other-cmd">
+              <label class="vt">自定义:</label>
+              <ul>
+                <li><button class="btn-add" title="添加命令" @click="addOtherCmd()">+添加</button></li>
+                <li v-for="(o,index) in formData.otherCommand">
+                  <input class="input-name" type="text" placeholder="title" v-model="o.name" maxlength="6">
+                  <input class="input-cmd" type="text" placeholder="command..." v-model="o.command">
+                  <button class="btn-cancel ml10" title="删除" @click="delOtherCmd(index)">x</button>
+                </li>
+              </ul>
           </div>
           <div class="btns">
             <button @click="saveModify(formData.id?formData.id:'')" class="btn-save">保存</button>
