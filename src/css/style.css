@@ -205,6 +205,10 @@ ul,li{
     background: url(../image/icon_kill.png) center no-repeat;
     background-size: 57%;
 }
+.icon-copy{
+    background: url(../image/icon_copy.png) center no-repeat;
+    background-size: 57%;
+}
 .icon-delete{
     background: url(../image/icon_delete.png) center no-repeat;
     background-size: 57%;

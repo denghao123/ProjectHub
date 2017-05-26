@@ -150,6 +150,20 @@ var vm = new Vue({
       }
     },
 
+    // 复制项目
+    copy(id) {
+      var list = this.appData.list;
+      for (var i in list) {
+        if (id === list[i].id) {
+          var temp = this.clone(list[i]);
+          temp.title = list[i].title + ".bak";
+          temp.id = Date.parse(new Date()) / 1000;
+          list.push(temp)
+        }
+      }
+      localStorage.setItem("data", JSON.stringify(this.appData));
+    },
+
     // 删除item
     del(id) {
       if (!id) return;
@@ -172,7 +186,7 @@ var vm = new Vue({
         for (var i in list) {
           if (id === list[i].id) {
             this.currData = list[i];
-            this.formData = this.copy(this.currData);
+            this.formData = this.clone(this.currData);
           }
         }
       } else {
@@ -275,7 +289,7 @@ var vm = new Vue({
     /*
      * 克隆对象
      */
-    copy(obj) {
+    clone(obj) {
       var o;
       if (typeof obj == "object") {
         if (obj === null) {
@@ -284,12 +298,12 @@ var vm = new Vue({
           if (obj instanceof Array) {
             o = [];
             for (var i = 0, len = obj.length; i < len; i++) {
-              o.push(this.copy(obj[i]));
+              o.push(this.clone(obj[i]));
             }
           } else {
             o = {};
             for (var j in obj) {
-              o[j] = this.copy(obj[j]);
+              o[j] = this.clone(obj[j]);
             }
           }
         }
