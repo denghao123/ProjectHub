@@ -5,7 +5,7 @@
 ![project-hub1.jpg][1]
 
 ### 下载地址/download：
-[[百度网盘]](http://pan.baidu.com/s/1pLRVZRH)
+[[百度网盘]](http://pan.baidu.com/s/1c2CJyhE)
 
 ### 安装步骤/steps：
     npm i
