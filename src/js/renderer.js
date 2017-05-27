@@ -9,7 +9,8 @@ var vm = new Vue({
   el: "#app",
   data: {
     appData: {
-      list: []
+      list: [],
+      children: []
     },
     currData: {},
     formData: {
@@ -23,12 +24,11 @@ var vm = new Vue({
     processData: '',
     input_cmd: '',
     showModify: false,
-    children: []
   },
   mounted() {
     var _this = this;
 
-    this.getAllData();
+    this.getAppData();
 
     // error caught
     process.on('uncaughtException', function(error) {
@@ -39,18 +39,19 @@ var vm = new Vue({
 
   methods: {
 
-    /*
-     *get localStorage data
-     */
-    getAllData() {
-      this.appData = JSON.parse(localStorage.getItem("data")) || {
-        list: []
+    getAppData() {
+      this.appData = JSON.parse(localStorage.getItem("appData")) || {
+        list: [],
+        children: []
       };
     },
 
+    saveAppData() {
+      localStorage.setItem("appData", JSON.stringify(this.appData));
+    },
+
     onDrag(e) {
-      drag = false;
-      localStorage.setItem("data", JSON.stringify(this.appData));
+      this.saveAppData();
     },
 
     /*
@@ -89,10 +90,11 @@ var vm = new Vue({
       // save pid
       for (var v of this.appData.list) {
         if (v.id === id) {
-          this.children.push({
+          this.appData.children.push({
             id: id,
             pid: child.pid
-          })
+          });
+          this.saveAppData();
         }
       }
 
@@ -100,22 +102,32 @@ var vm = new Vue({
 
     // close process
     close(id) {
-      var c = this.children;
-      for (var i in c) {
-        if (c[i].id === id) {
-          this.taskKill(c[i].pid);
-          delete c[i];
-          return;
+      var c = this.appData.children;
+      var a = c.filter(function(v, i) {
+        return v.id === id;
+      });
+
+      if (a.length == 0) {
+        this.displayProcess("[ The process is not running !]", 'error');
+        return;
+
+      } else {
+
+        for (var i = 0; i < c.length; i++) {
+          if (c[i].id === id) {
+            this.taskKill(c[i].pid);
+            c.splice(i--, 1);
+          }
         }
+        this.saveAppData();
       }
-      // if not found the id:
-      this.displayProcess("[ The process is not running !]", 'error');
+
     },
 
     taskKill(pid) {
       var _this = this;
       if (!pid) {
-        _this.displayProcess('sorry! process pid missed.', 'error');
+        _this.displayProcess('sorry! process pid is missing.', 'error');
         return;
       }
 
@@ -125,7 +137,7 @@ var vm = new Vue({
       })
 
       child.on('exit', (code) => {
-        _this.displayProcess("[ process killed! ]", 'done');
+        _this.displayProcess("[pid:" + pid + " killed successful! ]", 'done');
       });
 
     },
@@ -158,7 +170,7 @@ var vm = new Vue({
           list.push(temp)
         }
       }
-      localStorage.setItem("data", JSON.stringify(this.appData));
+      this.saveAppData();
     },
 
     // delete project
@@ -170,7 +182,7 @@ var vm = new Vue({
           list.splice(i, 1);
         }
       }
-      localStorage.setItem("data", JSON.stringify(this.appData));
+      this.saveAppData();
     },
 
 
@@ -242,7 +254,7 @@ var vm = new Vue({
 
       this.currData = form;
       this.toggleShow();
-      localStorage.setItem("data", JSON.stringify(this.appData));
+      this.saveAppData();
     },
 
     // form check
