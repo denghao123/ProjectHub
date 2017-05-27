@@ -23,41 +23,24 @@ var vm = new Vue({
     processData: '',
     input_cmd: '',
     showModify: false,
-    chirdren: {}
+    children: []
   },
   mounted() {
-    // 测试
-    // let temp = {
-    //   "list": [{
-    //     "id": 1495525103,
-    //     "title": "rrkd-static-h5",
-    //     "filePath": "E:\\project\\rrkd-static-h5",
-    //     "cmd_dev": "npm run dev",
-    //     "cmd_build": "npm run build",
-    //     "otherCommand": [{
-    //       "name": '自定义1',
-    //       "command": 'node -v'
-    //     }, {
-    //       "name": '自定义2',
-    //       "command": 'npm -v'
-    //     }]
-    //   }]
-    // }
-    // localStorage.setItem("data", JSON.stringify(temp));
+    var _this = this;
 
-    let _this = this;
     this.getAllData();
 
-    // error捕获
+    // error caught
     process.on('uncaughtException', function(error) {
       _this.displayProcess("[error caught]" + this.gbk(error), 'error');
     });
+
   },
 
   methods: {
 
     /*
-     *获取全部数据
+     *get localStorage data
      */
     getAllData() {
       this.appData = JSON.parse(localStorage.getItem("data")) || {
@@ -65,14 +48,13 @@ var vm = new Vue({
       };
     },
 
-    //拖动换位
     onDrag(e) {
       drag = false;
       localStorage.setItem("data", JSON.stringify(this.appData));
     },
 
     /*
-     *选择项目地址
+     * get real path
      */
     getFilePath(e) {
       for (var f of e.target.files) {
@@ -80,63 +62,78 @@ var vm = new Vue({
       }
     },
 
-    /*
-     * 打开目录
-     */
     openFolder(path) {
       cp.exec('explorer ' + path);
       this.displayProcess('open folder: ' + path, 'done');
     },
 
-    /*
-     *执行cmd
-     */
-    task(path, command) {
-      var _this = this,
-        cmd = "cd/d " + path + "&&" + command;
-
-      // eg:  'start cmd /k "cd/d f:\\project\\AI-chat&&gulp"';
-      this.chirdren = cp.exec(cmd, {
+    task(id, path, command) {
+      var _this = this;
+      var cmd = "cd/d " + path + "&&" + command;
+      var child = cp.exec(cmd, {
         encoding: "binary"
       });
 
-      _this.chirdren.stdout.on('data', (data) => {
+      child.stdout.on('data', (data) => {
         _this.displayProcess(data);
       })
 
-      _this.chirdren.stderr.on('data', (data) => {
+      child.stderr.on('data', (data) => {
         _this.displayProcess(data, 'error', 'gb2312');
       })
 
-      _this.chirdren.on('exit', (code) => {
+      child.on('exit', (code) => {
         _this.displayProcess("======= done! =======", 'done');
       });
 
+      // save pid
+      for (var v of this.appData.list) {
+        if (v.id === id) {
+          this.children.push({
+            id: id,
+            pid: child.pid
+          })
+        }
+      }
+
     },
 
-    // 关闭进程
+    // close process
     close(id) {
-      var _this = this;
+      var c = this.children;
+      for (var i in c) {
+        if (c[i].id === id) {
+          this.taskKill(c[i].pid);
+          delete c[i];
+          return;
+        }
+      }
+      // if not found the id:
+      this.displayProcess("[ The process is not running !]", 'error');
+    },
 
-      if (!_this.chirdren.pid) {
+    taskKill(pid) {
+      var _this = this;
+      if (!pid) {
         _this.displayProcess('sorry! process pid missed.', 'error');
         return;
       }
 
-      let cmd = 'taskkill /PID ' + _this.chirdren.pid + ' /T /F';
-
-      let child_close = cp.exec(cmd, {
+      var cmd = 'taskkill /PID ' + pid + ' /T /F';
+      var child = cp.exec(cmd, {
         encoding: "binary"
-      }, function(error, stdout, stderr) {
-        if (stdout) _this.displayProcess("[process closed!]", 'done', 'gb2312');
-        if (stderr) _this.displayProcess(stderr, 'error', 'gb2312');
+      })
+
+      child.on('exit', (code) => {
+        _this.displayProcess("[ process killed! ]", 'done');
       });
+
     },
 
-    // 展示结果
+    // display result
     displayProcess(str, type, char) {
       this.scrollToBottom();
-      let s = str.toString();
+      var s = str.toString();
       switch (type) {
         case 'error':
           this.processData += '<div class="c-red">' + this.gbk(s, char) + '</div>';
@@ -150,7 +147,7 @@ var vm = new Vue({
       }
     },
 
-    // 复制项目
+    // copy project
     copy(id) {
       var list = this.appData.list;
       for (var i in list) {
@@ -164,7 +161,7 @@ var vm = new Vue({
       localStorage.setItem("data", JSON.stringify(this.appData));
     },
 
-    // 删除item
+    // delete project
     del(id) {
       if (!id) return;
       var list = this.appData.list;
@@ -178,7 +175,7 @@ var vm = new Vue({
 
 
     /*
-     *打开modify弹窗
+     *open modify window
      */
     openModify(id) {
       if (id) {
@@ -202,7 +199,7 @@ var vm = new Vue({
       this.toggleShow();
     },
 
-    // 添加自定义cmd
+    // DIY cmd
     addOtherCmd() {
       var cmds = this.formData.otherCommand;
 
@@ -216,14 +213,14 @@ var vm = new Vue({
       }
     },
 
-    // 删除自宝义cmd
+    // delete diy cmd
     delOtherCmd(index) {
       var cmds = this.formData.otherCommand;
       cmds.splice(index, 1);
     },
 
     /*
-     *保存modify
+     *save modify
      */
     saveModify(id) {
       // check
@@ -276,7 +273,6 @@ var vm = new Vue({
       this.showModify = !this.showModify;
     },
 
-    // 新开cmd窗口
     openCmd() {
       cp.exec("start cmd /k");
       this.displayProcess("start cmd", 'done');
@@ -287,7 +283,7 @@ var vm = new Vue({
     },
 
     /*
-     * 克隆对象
+     * clone object
      */
     clone(obj) {
       var o;
@@ -313,35 +309,27 @@ var vm = new Vue({
       return o;
     },
 
-    /*
-     *取消modify
-     */
+
     cancelModify() {
       this.toggleShow();
     },
 
-    // 打开浏览器
+    // open url in brower
     openWebUrl(url) {
       shell.openExternal(url);
     },
 
-    /*
-     *中文乱码问题
-     */
     gbk(str, char) {
       return iconv.decode(new Buffer(str, 'binary'), char || 'utf-8');
     },
 
-    /*
-     *保持底部可见
-     */
     scrollToBottom() {
       var b = document.getElementById('bottomLine');
       b.scrollIntoView();
     },
 
     /*
-     * Toast 提示框
+     * Toast
      */
     toast(msg, callback, time) {
       if (!document.getElementById('js-toast')) {

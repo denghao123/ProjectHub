@@ -2,7 +2,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>前端项目集成工具 project-hub</title>
+<meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>前端项目集成工具 projectHub</title>
 <link rel="stylesheet" type="text/css" href="./src/css/style.css">
 <meta name="author" content="DH">
 </head>
@@ -20,12 +22,12 @@
           <span class="icon icon-menu ml10 drag"></span>
           <span class="title">{{o.title}}</span>
           <span class="other-cmd">
-              <span v-for="item in o.otherCommand" :title="item.name" @click.stop.prevent="task(o.filePath,item.command)">{{item.name}}</span>
+              <span v-for="item in o.otherCommand" :title="item.name" @click.stop.prevent="task(o.id,o.filePath,item.command)">{{item.name}}</span>
           </span>
           <span class="icon-large pointer icon-folder" title="打开文件位置" @click.stop.prevent="openFolder(o.filePath)"></span>
-          <span class="icon-large pointer icon-play" title="运行" @click.stop.prevent="task(o.filePath,o.cmd_dev)"></span>
-          <span class="icon-large pointer icon-package" title="打包" @click.stop.prevent="task(o.filePath,o.cmd_build)"></span>
-          <!-- <span class="icon-large pointer icon-kill" title="停止" @click.stop.prevent="close(o.id)"></span> -->
+          <span class="icon-large pointer icon-play" title="运行" @click.stop.prevent="task(o.id,o.filePath,o.cmd_dev)"></span>
+          <span class="icon-large pointer icon-kill" title="停止" @click.stop.prevent="close(o.id)"></span>
+          <span class="icon-large pointer icon-package" title="打包" @click.stop.prevent="task(o.id,o.filePath,o.cmd_build)"></span>
           <span class="icon-large pointer icon-copy" title="复制" @click.stop.prevent="copy(o.id)"></span>
           <span class="icon-large pointer icon-delete" title="移除项目" @click.stop.prevent="del(o.id)"></span>
         </li>
@@ -33,7 +35,6 @@
     </ul>
 
     <div :class="['modify-wrap',showModify?'on':'']">
-    <!-- <div class="modify-wrap on"> -->
         <div class="title">{{formData.id?'Modify':'Add'}}</div>
         <div class="form">
           <div class="item">
@@ -83,7 +84,6 @@
     <div v-html="processData"></div>
     <div id="bottomLine" class="bottom-line"></div>
   </div>
-
 </div>
 
 </body>
