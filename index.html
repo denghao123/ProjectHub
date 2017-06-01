@@ -13,8 +13,10 @@
   <div class="main">
     <div class="menu">
       <span class="btn-add btn-bd-r" @click="openModify()" title="添加"></span>
+      <span class="btn-gear btn-bd-r" @click="openConf()" title="配置"></span>
       <span class="btn-help btn-bd-r" @click="openWebUrl('http://denghao.me/index.php/archives/project-hub.html')" title="帮助"></span>
       <span class="btn-other"></span>
+ 
     </div>
     <ul class="list">
       <draggable v-model="appData.list" @start="drag=true" @end="onDrag">
@@ -34,6 +36,7 @@
       </draggable>
     </ul>
 
+    <!-- 项目修改 -->
     <div :class="['modify-wrap',showModify?'on':'']">
         <div class="title">{{formData.id?'Modify':'Add'}}</div>
         <div class="form">
@@ -61,7 +64,7 @@
               <ul>
                 <li><button class="btn-add" title="添加命令" @click="addOtherCmd()">+添加</button></li>
                 <li v-for="(o,index) in formData.otherCommand">
-                  <input class="input-name" type="text" placeholder="title" v-model="o.name" maxlength="6">
+                  <input class="input-name" type="text" placeholder="title" v-model="o.name" maxlength="16">
                   <input class="input-cmd" type="text" placeholder="command..." v-model="o.command">
                   <button class="btn-cancel ml10" title="删除" @click="delOtherCmd(index)">x</button>
                 </li>
@@ -74,6 +77,27 @@
         </div>
     </div>
     <div class="mask" v-show="showModify" @click="cancelModify"></div>
+   
+    <!-- 程序配置 -->
+    <div :class="['modify-wrap',showConf?'on':'']">
+        <div class="title">程序配置</div>
+        <div class="form">
+          <div class="item vt">
+              <label>环境变量<br>path：</label>
+              <textarea v-model="sysFormData.tempPath" placeholder='多个path之间用英文分号";" 隔开'></textarea>
+          </div>
+          <div class="item">
+              <label></label>
+              <span class="f12 c-gray">* 临时变量，仅作用于本程序。多个path之间用英文分号";" 隔开</span>
+          </div>
+          <div class="btns">
+            <button @click="saveConf" class="btn-save">保存</button>
+            <button @click="cancelConf" class="btn-cancel">取消</button>
+          </div>
+        </div>
+
+    </div>
+    <div class="mask" v-show="showConf" @click="cancelConf"></div>
   </div>
 
   <div class="process">

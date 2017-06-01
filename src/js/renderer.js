@@ -10,7 +10,10 @@ var vm = new Vue({
   data: {
     appData: {
       list: [],
-      children: []
+      children: [],
+      sysConf: {
+        tempPath: ''
+      }
     },
     currData: {},
     formData: {
@@ -21,9 +24,13 @@ var vm = new Vue({
       cmd_build: '',
       otherCommand: []
     },
+    sysFormData: {
+      tempPath: ''
+    },
     processData: '',
     input_cmd: '',
     showModify: false,
+    showConf: false
   },
   mounted() {
     var _this = this;
@@ -42,8 +49,18 @@ var vm = new Vue({
     getAppData() {
       this.appData = JSON.parse(localStorage.getItem("appData")) || {
         list: [],
-        children: []
-      };
+        children: [],
+        sysConf: {
+          tempPath: ''
+        }
+      }
+
+      this.clearPids();
+    },
+
+    clearPids() {
+      this.appData.children = [];
+      this.saveAppData();
     },
 
     saveAppData() {
@@ -68,9 +85,15 @@ var vm = new Vue({
       this.displayProcess('open folder: ' + path, 'done');
     },
 
+    // 环境变量（临时）
+    getTempPath() {
+      var data = JSON.parse(localStorage.getItem("appData"));
+      return (data.sysConf.tempPath ? "set path=%path%;" + (data.sysConf.tempPath || '') + "&&" : '')
+    },
+
     task(id, path, command) {
       var _this = this;
-      var cmd = "cd/d " + path + "&&" + command;
+      var cmd = this.getTempPath() + "cd/d " + path + "&&" + command;
       var child = cp.exec(cmd, {
         encoding: "binary"
       });
@@ -208,7 +231,7 @@ var vm = new Vue({
           otherCommand: []
         }
       }
-      this.toggleShow();
+      this.toggleShow("Modify");
     },
 
     // DIY cmd
@@ -253,8 +276,13 @@ var vm = new Vue({
       }
 
       this.currData = form;
-      this.toggleShow();
+      this.toggleShow("Modify");
       this.saveAppData();
+      this.toast("操作成功！");
+    },
+
+    cancelModify() {
+      this.toggleShow('Modify');
     },
 
     // form check
@@ -281,10 +309,37 @@ var vm = new Vue({
       return obj;
     },
 
-    toggleShow() {
-      this.showModify = !this.showModify;
+    /*
+     * 程序配置控制
+     */
+    openConf() {
+      this.toggleShow("Conf");
+      this.sysFormData = this.clone(this.appData.sysConf);
     },
 
+    saveConf() {
+      this.appData.sysConf = this.sysFormData;
+      this.saveAppData();
+      this.toggleShow("Conf");
+      this.toast("操作成功！");
+    },
+
+    cancelConf() {
+      this.toggleShow('Conf');
+    },
+
+    toggleShow(type) {
+      if (type === 'Modify') {
+        this.showModify = !this.showModify;
+      } else {
+        this.showConf = !this.showConf;
+      }
+    },
+
+
+    /*
+     * open new cmd
+     */
     openCmd() {
       cp.exec("start cmd /k");
       this.displayProcess("start cmd", 'done');
@@ -319,11 +374,6 @@ var vm = new Vue({
         o = obj;
       }
       return o;
-    },
-
-
-    cancelModify() {
-      this.toggleShow();
     },
 
     // open url in brower
@@ -368,7 +418,7 @@ var vm = new Vue({
       setTimeout(function() {
         document.body.removeChild(box);
         typeof callback === "function" && callback();
-      }, (time ? time : 1000));
+      }, (time ? time : 800));
     }
   },
   components: {
