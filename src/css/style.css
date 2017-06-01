@@ -281,7 +281,7 @@ ul,li{
     flex: 1;
     height: 22px;
     text-indent: 8px;
-    background-color: #d8d8d8;
+    background-color: #efefef;
     border: none;
     border-radius: 2px;
 }
@@ -289,7 +289,7 @@ ul,li{
     flex: 1;
     height: 80px;
     border-radius: 2px;
-    background-color: #d8d8d8;
+    background-color: #efefef;
     padding: 4px;
 }
 .modify-wrap .item .file-box{
@@ -334,7 +334,7 @@ ul,li{
 .modify-wrap .item-other-cmd input{
     height: 22px;
     text-indent: 8px;
-    background-color: #d8d8d8;
+    background-color: #efefef;
     border: none;
     border-radius: 2px;
 }
