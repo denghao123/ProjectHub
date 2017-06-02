@@ -95,7 +95,8 @@ var vm = new Vue({
       var _this = this;
       var cmd = this.getTempPath() + "cd/d " + path + "&&" + command;
       var child = cp.exec(cmd, {
-        encoding: "binary"
+        encoding: "binary",
+        maxBuffer: 2 * 1024 * 1024
       });
 
       child.stdout.on('data', (data) => {
@@ -156,7 +157,8 @@ var vm = new Vue({
 
       var cmd = 'taskkill /PID ' + pid + ' /T /F';
       var child = cp.exec(cmd, {
-        encoding: "binary"
+        encoding: "binary",
+        maxBuffer: 2 * 1024 * 1024
       })
 
       child.on('exit', (code) => {
