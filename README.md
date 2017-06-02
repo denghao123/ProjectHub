@@ -3,10 +3,14 @@
 > 前端项目集中管理的win桌面应用，基于electron。 ---by [DH](http://denghao.me)
 
 首页截屏
+
 ![projectHub][1]
 
+
 配置页截屏
+
 ![projectHub][2]
+
 
 ### 下载地址/download：
 [[百度网盘]](http://pan.baidu.com/s/1c2CJyhE)
