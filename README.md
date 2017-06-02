@@ -1,8 +1,12 @@
-# 前端项目集成工具 project-hub
+# 前端项目集成工具 projectHub
 
 > 前端项目集中管理的win桌面应用，基于electron。 ---by [DH](http://denghao.me)
 
-![project-hub1.jpg][1]
+首页截屏
+![projectHub][1]
+
+配置页截屏
+![projectHub][2]
 
 ### 下载地址/download：
 [[百度网盘]](http://pan.baidu.com/s/1c2CJyhE)
@@ -46,4 +50,5 @@
 - add：进度详情展示
 - add：支持手动输入命令行
 
-[1]: http://denghao.me/usr/uploads/2017/05/3336752715.jpg
+[1]: src/image/screen1.jpg
+[2]: src/image/screen2.jpg
