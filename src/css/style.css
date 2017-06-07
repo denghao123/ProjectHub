@@ -51,10 +51,10 @@ ul,li{
     cursor: move;
 }
 .c-red{
-    color: red;
+    color: #F90000;
 }
 .c-green{
-    color: green;
+    color: #00A800;
 }
 .c-gray{
     color: #adadad;
@@ -152,6 +152,23 @@ ul,li{
     width: 1px;
     height: 100%;
     background-color: #6E6E6E;
+}
+
+.main .no-data{
+    width: 130px;
+    margin: 140px auto;
+    text-align: center;
+    cursor: pointer;
+    color: #666;
+}
+.main .no-data:hover{
+    color: #555;
+}
+.no-data .icon-folder-add{
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    background: url(../image/icon_folder_add.png) no-repeat center;
 }
 .main .list{
     display: block;
@@ -274,7 +291,7 @@ ul,li{
 }
 .modify-wrap .item>label{
     display: inline-block;
-    width: 70px;
+    width: 80px;
     vertical-align: top;
 }
 .modify-wrap .item>input,.input-mask{
@@ -287,7 +304,7 @@ ul,li{
 }
 .modify-wrap .item>textarea{
     flex: 1;
-    height: 80px;
+    height: 40px;
     border-radius: 2px;
     background-color: #efefef;
     padding: 4px;

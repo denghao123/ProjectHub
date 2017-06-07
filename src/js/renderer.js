@@ -12,7 +12,8 @@ var vm = new Vue({
       list: [],
       children: [],
       sysConf: {
-        tempPath: ''
+        tempPath: '',
+        cmdPath: ''
       }
     },
     currData: {},
@@ -25,7 +26,8 @@ var vm = new Vue({
       otherCommand: []
     },
     sysFormData: {
-      tempPath: ''
+      tempPath: '',
+      cmdPath: ''
     },
     processData: '',
     input_cmd: '',
@@ -51,16 +53,28 @@ var vm = new Vue({
         list: [],
         children: [],
         sysConf: {
-          tempPath: ''
+          tempPath: '',
+          cmdPath: ''
         }
       }
 
+      // 兼容迭代数据结构变化
+      if (!this.appData.list) this.appData.list = [];
+      if (!this.appData.children) this.appData.children = [];
+      if (!this.appData.sysConf) this.appData.sysConf = {
+        tempPath: '',
+        cmdPath: ''
+      };
+      if (!this.appData.sysConf.tempPath) this.appData.sysConf.tempPath = '';
+      if (!this.appData.sysConf.cmdPath) this.appData.sysConf.cmdPath = 'C:\\';
+
+      // 清空上次pid
       this.clearPids();
+      this.saveAppData();
     },
 
     clearPids() {
       this.appData.children = [];
-      this.saveAppData();
     },
 
     saveAppData() {
@@ -74,12 +88,15 @@ var vm = new Vue({
     /*
      * get real path
      */
-    getFilePath(e) {
+    getFilePath(e, type) {
       for (var f of e.target.files) {
-        this.formData.filePath = f.path;
+        if (type == 'projectPath') {
+          this.formData.filePath = f.path;
+        } else {
+          this.sysFormData.cmdPath = f.path;
+        }
       }
     },
-
     openFolder(path) {
       cp.exec('explorer ' + path);
       this.displayProcess('open folder: ' + path, 'done');
@@ -94,9 +111,12 @@ var vm = new Vue({
     task(id, path, command) {
       var _this = this;
       var cmd = this.getTempPath() + "cd/d " + path + "&&" + command;
+
+      _this.displayProcess("ready...", 'done');
+
       var child = cp.exec(cmd, {
         encoding: "binary",
-        maxBuffer: 2 * 1024 * 1024
+        maxBuffer: 4 * 1024 * 1024
       });
 
       child.stdout.on('data', (data) => {
@@ -158,7 +178,7 @@ var vm = new Vue({
       var cmd = 'taskkill /PID ' + pid + ' /T /F';
       var child = cp.exec(cmd, {
         encoding: "binary",
-        maxBuffer: 2 * 1024 * 1024
+        maxBuffer: 4 * 1024 * 1024
       })
 
       child.on('exit', (code) => {
@@ -209,7 +229,6 @@ var vm = new Vue({
       }
       this.saveAppData();
     },
-
 
     /*
      *open modify window
@@ -342,8 +361,8 @@ var vm = new Vue({
     /*
      * open new cmd
      */
-    openCmd() {
-      cp.exec("start cmd /k");
+    openCmd(path) {
+      cp.exec("start cmd /k cd/d " + (path || 'c:\\'));
       this.displayProcess("start cmd", 'done');
     },
 

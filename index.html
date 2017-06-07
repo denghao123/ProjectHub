@@ -18,7 +18,7 @@
       <span class="btn-other"></span>
  
     </div>
-    <ul class="list">
+    <ul v-if="appData.list.length>0" class="list">
       <draggable v-model="appData.list" @start="drag=true" @end="onDrag">
         <li v-for="o in appData.list" @click="openModify(o.id)">
           <span class="icon icon-menu ml10 drag"></span>
@@ -36,6 +36,11 @@
       </draggable>
     </ul>
 
+    <div v-else class="no-data" title="添加" @click="openModify()">
+        <i class="icon-folder-add"></i>
+        <p>点击此处添加项目</p>
+    </div>
+
     <!-- 项目修改 -->
     <div :class="['modify-wrap',showModify?'on':'']">
         <div class="title">{{formData.id?'Modify':'Add'}}</div>
@@ -47,8 +52,8 @@
           <div class="item">
               <label>路径:</label>
               <div class="file-box">
-                <input class="input-file" type="file" @change="getFilePath($event)" webkitdirectory directory/>
-                <input class="input-mask" v-model="formData.filePath" readonly/>
+                <input class="input-file" type="file" @change="getFilePath($event,'projectPath')" webkitdirectory directory/>
+                <input class="input-mask" type="text" v-model="formData.filePath" readonly/>
               </div>
           </div>
           <div class="item">
@@ -82,13 +87,23 @@
     <div :class="['modify-wrap',showConf?'on':'']">
         <div class="title">程序配置</div>
         <div class="form">
+          <div class="item">
+              <label>cmd目录: </label>
+              <div class="file-box">
+                <input class="input-file" type="file" @change="getFilePath($event,'cmdPath')" webkitdirectory directory/>
+                <input class="input-mask" type="text" v-model="sysFormData.cmdPath" readonly/>
+              </div>
+          </div>
           <div class="item vt">
-              <label>环境变量<br>path：</label>
+              <label>环境变量: <br>(path)</label>
               <textarea v-model="sysFormData.tempPath" placeholder='多个path之间用英文分号";" 隔开'></textarea>
           </div>
           <div class="item">
               <label></label>
-              <span class="f12 c-gray">* 临时变量，仅作用于本程序。多个path之间用英文分号";" 隔开</span>
+              <span class="f12 c-gray">注：<br>
+              1. cmd目录为新建命令行窗口目录，与各项目执行目录无关<br>
+              2. 环境变量为临时变量，多个path之间用英文分号";" 隔开
+              </span>
           </div>
           <div class="btns">
             <button @click="saveConf" class="btn-save">保存</button>
@@ -102,7 +117,7 @@
 
   <div class="process">
     <div class="btns">
-      <span class="mr4" title="命令行" @click="openCmd()">cmd</span>
+      <span class="mr4" title="命令行" @click="openCmd(appData.sysConf.cmdPath)">cmd</span>
       <span title="清除" @click="clearProcessInfo()">clear</span>
     </div>
     <div v-html="processData"></div>
