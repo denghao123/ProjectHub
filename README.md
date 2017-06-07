@@ -13,13 +13,18 @@
 
 
 ### 下载地址/download：
-[[百度网盘]](http://pan.baidu.com/s/1c2CJyhE)
+[[百度网盘]](http://pan.baidu.com/s/1nvDh8Yt)
 
 ### 安装步骤/steps：
     npm i
 	npm start
 
 ### 更新日志/updates
+###### 2017.6.7 更新：
+- add: cmd目录设置
+- add: 初始引导界面
+- fix: 数据结构变动引起的bug
+
 ###### 2017.6.1 更新：
 - add: 临时环境变量设置
 - edit: 优化子进程清除功能
