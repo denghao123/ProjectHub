@@ -1,4 +1,5 @@
-﻿var cp = require('child_process');
+﻿var ipcRenderer = require('electron').ipcRenderer;
+var cp = require('child_process');
 var iconv = require('iconv-lite');
 var draggable = require('vuedraggable');
 var {
@@ -211,7 +212,7 @@ var vm = new Vue({
         if (id === list[i].id) {
           var temp = this.clone(list[i]);
           temp.title = list[i].title + ".bak";
-          temp.id = Date.parse(new Date()) / 1000;
+          temp.id = new Date().getTime();
           list.push(temp)
         }
       }
@@ -409,6 +410,15 @@ var vm = new Vue({
     scrollToBottom() {
       var b = document.getElementById('bottomLine');
       b.scrollIntoView();
+    },
+
+    // window control
+    closeWin(){
+      ipcRenderer.send('window-all-closed')
+    },
+
+    minWin(){
+      ipcRenderer.send('min-window')
     },
 
     /*

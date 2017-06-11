@@ -4,12 +4,17 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge">
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<title>前端项目集成工具 projectHub</title>
+<title>ProjectHub 前端项目集成工具</title>
 <link rel="stylesheet" type="text/css" href="./src/css/style.css">
 <meta name="author" content="DH">
 </head>
 <body>
 <div id="app" class='app'>
+  <div class="win-bar">
+    <span class="title">ProjectHub</span>
+    <span class="btn btn-win-close" @click="closeWin"></span>
+    <span class="btn btn-win-min" @click="minWin"></span>
+  </div>
   <div class="main">
     <div class="menu">
       <span class="btn-add btn-bd-r" @click="openModify()" title="添加"></span>
@@ -116,12 +121,14 @@
   </div>
 
   <div class="process">
-    <div class="btns">
-      <span class="mr4" title="命令行" @click="openCmd(appData.sysConf.cmdPath)">cmd</span>
-      <span title="清除" @click="clearProcessInfo()">clear</span>
+    <div class="process-inner">
+      <div class="btns">
+        <span class="mr4" title="命令行" @click="openCmd(appData.sysConf.cmdPath)">cmd</span>
+        <span title="清除" @click="clearProcessInfo()">clear</span>
+      </div>
+      <div v-html="processData"></div>
+      <div id="bottomLine" class="bottom-line"></div>
     </div>
-    <div v-html="processData"></div>
-    <div id="bottomLine" class="bottom-line"></div>
   </div>
 </div>
 

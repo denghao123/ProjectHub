@@ -12,11 +12,15 @@ body {
     font-size: 14px;
     transform:translateZ(0);
     -webkit-transform:translateZ(0);
+    font-family: "Microsoft YaHei";
 }
 ul,li{
     list-style: none;
     margin: 0;
     padding: 0;
+}
+i,b,em{
+    font-style: normal;
 }
 .vt{
     vertical-align: top;
@@ -65,7 +69,7 @@ ul,li{
 }
 
 ::-webkit-scrollbar{
-    width: 10px;
+    width: 6px;
     background-color: #F5F5F5;
 }
 
@@ -92,7 +96,42 @@ ul,li{
     -ms-flex-direction: column;
     flex-direction: column;
 }
-
+/*win control*/
+.win-bar{
+    height: 28px;
+    line-height: 28px;
+    background-color:#333;
+    color: #d9d9d9;
+    -webkit-app-region: drag;
+    font-size: 13px;
+}
+.win-bar .title{
+    display: inline-block;
+    height: 28px;
+    background: url(../image/icon.ico) left center no-repeat;
+    background-size: 20px;
+    padding-left: 24px;
+    margin-left: 4px;
+}
+.win-bar >.btn{
+    float: right;
+    display: inline-block;
+    width: 36px;
+    height: 28px;
+    -webkit-app-region: no-drag;
+}
+.btn-win-min{
+    background: url(../image/icon_win.png) 4px center no-repeat;
+}
+.btn-win-min:hover{
+    background-color: #555;
+}
+.btn-win-close{
+    background: url(../image/icon_win.png) -27px center no-repeat;
+}
+.btn-win-close:hover{
+    background-color: #df3d3d;
+}
 .main {
     -webkit-box-flex: 1;
     -webkit-flex: 1;
@@ -388,7 +427,10 @@ ul,li{
 }
 
 .process {
-    padding: 6px;
+   overflow: hidden;
+   border: 6px solid #000;
+}
+.process-inner{
     height: 100px;
     min-height: 100px;
     background-color: #000;
@@ -397,15 +439,16 @@ ul,li{
     font-size: 14px;
     overflow-x: hidden;
     position: relative;
+    transition: all ease 0.2s;
 }
-
 .process .bottom-line {
     height: 30px
 }
 
 .process .btns{
     position: fixed;
-    right: 6px;
+    bottom:6px;
+    right: 10px;
     width: 90px;
     text-align: right;
     padding: 2px 0;
@@ -413,7 +456,10 @@ ul,li{
     text-align: center;
     transition: all 0.5s ease;
 }
-.process:hover .btns{
+.process-inner:hover{
+    height: 350px;
+}
+.process-inner:hover .btns{
     opacity: 1;
 }
 .process .btns>span{
