@@ -1,23 +1,19 @@
-# 前端项目集成工具 projectHub
+# ProjectHub 前端项目集成工具 
 
-> 前端项目集中管理的win桌面应用，基于electron。 ---by [DH](http://denghao.me)
+> 前端项目集中管理的windows桌面应用，基于electron。 ---by [DH](http://denghao.me)
 
-首页截屏
+首页截屏:
 
 ![projectHub][1]
 
 
-配置页截屏
+配置页截屏:
 
 ![projectHub][2]
 
 
 ### 下载地址/download：
-[[百度网盘]](http://pan.baidu.com/s/1nvDh8Yt)
-
-### 安装步骤/steps：
-    npm i
-	npm start
+[[官网下载]](http://denghao.me/index.php/archives/project-hub.html)
 
 ### 更新日志/updates
 ###### 2017.6.11 更新：
