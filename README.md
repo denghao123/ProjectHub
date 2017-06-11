@@ -13,7 +13,7 @@
 
 
 ### 下载地址/download：
-[[官网下载]](http://denghao.me/index.php/archives/project-hub.html)
+[[官网下载]](http://denghao.me/index.php/archives/ProjectHub.html)
 
 ### 更新日志/updates
 ###### 2017.6.11 更新：
