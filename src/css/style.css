@@ -439,7 +439,7 @@ i,b,em{
     font-size: 14px;
     overflow-x: hidden;
     position: relative;
-    transition: all ease 0.2s;
+    transition: all ease 0.1s 0.4s;
 }
 .process .bottom-line {
     height: 30px
@@ -457,7 +457,7 @@ i,b,em{
     transition: all 0.5s ease;
 }
 .process-inner:hover{
-    height: 350px;
+    height: 300px;
 }
 .process-inner:hover .btns{
     opacity: 1;
