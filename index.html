@@ -33,9 +33,9 @@
           </span>
           <span class="icon-large pointer icon-folder" title="打开文件位置" @click.stop.prevent="openFolder(o.filePath)"></span>
           <span class="icon-large pointer icon-play" title="运行" @click.stop.prevent="task(o.id,o.filePath,o.cmd_dev)"></span>
-          <span class="icon-large pointer icon-kill" title="停止" @click.stop.prevent="close(o.id)"></span>
           <span class="icon-large pointer icon-package" title="打包" @click.stop.prevent="task(o.id,o.filePath,o.cmd_build)"></span>
           <span class="icon-large pointer icon-copy" title="复制" @click.stop.prevent="copy(o.id)"></span>
+          <span class="icon-large pointer icon-kill" title="停止" @click.stop.prevent="close(o.id)"></span>
           <span class="icon-large pointer icon-delete" title="移除项目" @click.stop.prevent="del(o.id)"></span>
         </li>
       </draggable>
@@ -130,6 +130,17 @@
       <div id="bottomLine" class="bottom-line"></div>
     </div>
   </div>
+
+  <div class="confirm" v-if="confirm.show">
+    <div class="inner">
+      <div class="title">{{confirm.title}}</div>
+      <div class="btns">
+        <button class="active" @click="confirm.sure">确定</button>
+        <button @click="confirm.cancel">取消</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 </body>

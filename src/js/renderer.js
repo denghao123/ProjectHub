@@ -33,7 +33,13 @@ var vm = new Vue({
     processData: '',
     input_cmd: '',
     showModify: false,
-    showConf: false
+    showConf: false,
+    confirm: {
+      show: false,
+      title: '',
+      sure: function() {},
+      cancel: function() {}
+    }
   },
   mounted() {
     var _this = this;
@@ -221,14 +227,24 @@ var vm = new Vue({
 
     // delete project
     del(id) {
-      if (!id) return;
-      var list = this.appData.list;
-      for (var i in list) {
-        if (id === list[i].id) {
-          list.splice(i, 1);
+      var _this = this;
+      this.confirm = {
+        show: true,
+        title: '确定要删除吗？',
+        sure: () => {
+          var list = _this.appData.list;
+          for (var i in list) {
+            if (id === list[i].id) {
+              list.splice(i, 1);
+            }
+          }
+          _this.confirm.show = false;
+          _this.saveAppData();
+        },
+        cancel: function() {
+          _this.confirm.show = false;
         }
       }
-      this.saveAppData();
     },
 
     /*
@@ -413,11 +429,11 @@ var vm = new Vue({
     },
 
     // window control
-    closeWin(){
+    closeWin() {
       ipcRenderer.send('window-all-closed')
     },
 
-    minWin(){
+    minWin() {
       ipcRenderer.send('min-window')
     },
 
