@@ -16,6 +16,10 @@
 [[官网下载]](http://denghao.me/index.php/archives/ProjectHub.html)
 
 ### 更新日志/updates
+###### 2017.7.8 更新：
+- add: 定时清除log 
+- add: 拖动改变log窗口大小
+
 ###### 2017.6.11 更新：
 - fix: 复制时id可能重复的bug
 - edit: 美化程序窗口栏 
