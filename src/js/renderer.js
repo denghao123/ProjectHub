@@ -39,13 +39,22 @@ var vm = new Vue({
       title: '',
       sure: function() {},
       cancel: function() {}
-    }
+    },
+    drag:{
+      timer:"",
+      move_y:"",
+      down_y:"",
+      to_y:""
+    },
+    clearTimer:"",
+    time:""
   },
   mounted() {
     var _this = this;
 
     this.getAppData();
 
+    this.clearProcessInfo(true);
     // error caught
     process.on('uncaughtException', function(error) {
       _this.displayProcess("[error caught]" + this.gbk(error), 'error');
@@ -383,8 +392,23 @@ var vm = new Vue({
       this.displayProcess("start cmd", 'done');
     },
 
-    clearProcessInfo() {
-      this.processData = '';
+    clearProcessInfo(type) {
+      this.clearTimer&&clearInterval(this.clearTimer);
+      this.time=60;
+      if (type) {
+        this.clearTimer=setInterval(()=>{
+          if (this.time==0) {
+            this.processData = '';
+            this.time=60;
+          }else{
+            this.time--;
+          }
+        },1000)
+      }else{
+        this.time=60;
+        this.processData = '';
+        this.clearProcessInfo(true);
+      }
     },
 
     /*
@@ -436,6 +460,36 @@ var vm = new Vue({
     minWin() {
       ipcRenderer.send('min-window')
     },
+
+    // drag process
+    dragDown(e){
+      this.drag.timer&&clearInterval(this.drag.timer);
+        var box_H=this.$refs.process.offsetHeight;
+        var down_y=e.pageY;
+
+        this.drag.timer=setInterval(()=>{
+          if(this.drag.timer){
+            var to_y=down_y-this.drag.move_y+box_H;
+            if (to_y<46) {
+              to_y=46
+            }else if(to_y>500){
+              to_y=500
+            }
+            this.$refs.process.style.height=to_y+"px";        
+          }
+        });
+    },
+
+
+    mouseMove(e){
+      this.drag.move_y=e.pageY;
+    },
+
+    dragUp(e){
+      clearInterval(this.drag.timer);
+      this.drag.timer=undefined;
+    },
+
 
     /*
      * Toast

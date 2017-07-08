@@ -9,7 +9,7 @@
 <meta name="author" content="DH">
 </head>
 <body>
-<div id="app" class='app'>
+<div id="app" class='app' @mousemove.stop.prevent="mouseMove" @mouseup.stop.prevent="dragUp">
   <div class="win-bar">
     <span class="title">ProjectHub</span>
     <span class="btn btn-win-close" @click="closeWin"></span>
@@ -120,11 +120,13 @@
     <div class="mask" v-show="showConf" @click="cancelConf"></div>
   </div>
 
-  <div class="process">
+  <div class="process" ref="process">
+    <div class="dragger" ref="dragger" @mousedown.stop.prevent="dragDown">1</div>
     <div class="process-inner">
       <div class="btns">
         <span class="mr4" title="命令行" @click="openCmd(appData.sysConf.cmdPath)">cmd</span>
-        <span title="清除" @click="clearProcessInfo()">clear</span>
+        <span class="mr4"  title="清除" @click="clearProcessInfo()">clear</span>
+        <span title="自动清除" @click="clearProcessInfo(true)">{{time}}'</span>
       </div>
       <div v-html="processData"></div>
       <div id="bottomLine" class="bottom-line"></div>
