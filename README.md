@@ -16,6 +16,9 @@
 [[官网下载]](http://denghao.me/index.php/archives/ProjectHub.html)
 
 ### 更新日志/updates
+###### 2017.7.9 更新：
+- edit: 界面交互优化 
+
 ###### 2017.7.8 更新：
 - add: 定时清除log 
 - add: 拖动改变log窗口大小

@@ -1,12 +1,12 @@
 {
-  "name": "project-hub",
+  "name": "ProjectHub",
   "version": "1.0.0",
   "author": "DH",
   "description": "",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "packager": "electron-packager . projectHub --platform win32 --overwrite --out ../app  --icon=./src/image/icon.ico"
+    "packager": "electron-packager . ProjectHub --platform win32 --overwrite --out ../app  --icon=./src/image/icon.ico"
   },
   "license": "",
   "devDependencies": {

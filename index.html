@@ -9,7 +9,7 @@
 <meta name="author" content="DH">
 </head>
 <body>
-<div id="app" class='app' @mousemove.stop.prevent="mouseMove" @mouseup.stop.prevent="dragUp">
+<div id="app" class='app' @mousemove.stop="mouseMove" @mouseup.stop.prevent="dragUp">
   <div class="win-bar">
     <span class="title">ProjectHub</span>
     <span class="btn btn-win-close" @click="closeWin"></span>
@@ -25,18 +25,23 @@
     </div>
     <ul v-if="appData.list.length>0" class="list">
       <draggable v-model="appData.list" @start="drag=true" @end="onDrag">
-        <li v-for="o in appData.list" @click="openModify(o.id)">
-          <span class="icon icon-menu ml10 drag"></span>
+        <li v-for="o in appData.list" @click="openFolder(o.filePath)" title="打开文件位置">
+          <span class="icon icon-menu ml10 drag" title="排序" @click.stop=""></span>
           <span class="title">{{o.title}}</span>
           <span class="other-cmd">
               <span v-for="item in o.otherCommand" :title="item.name" @click.stop.prevent="task(o.id,o.filePath,item.command)">{{item.name}}</span>
           </span>
-          <span class="icon-large pointer icon-folder" title="打开文件位置" @click.stop.prevent="openFolder(o.filePath)"></span>
+          <!-- <span class="icon-large pointer icon-folder" title="打开文件位置" @click.stop.prevent="openFolder(o.filePath)"></span> -->
           <span class="icon-large pointer icon-play" title="运行" @click.stop.prevent="task(o.id,o.filePath,o.cmd_dev)"></span>
-          <span class="icon-large pointer icon-package" title="打包" @click.stop.prevent="task(o.id,o.filePath,o.cmd_build)"></span>
-          <span class="icon-large pointer icon-copy" title="复制" @click.stop.prevent="copy(o.id)"></span>
           <span class="icon-large pointer icon-kill" title="停止" @click.stop.prevent="close(o.id)"></span>
-          <span class="icon-large pointer icon-delete" title="移除项目" @click.stop.prevent="del(o.id)"></span>
+          <span class="icon-large pointer icon-package" title="打包" @click.stop.prevent="task(o.id,o.filePath,o.cmd_build)"></span>
+          <span class="icon-large pointer icon-more parent" title="">
+              <div class="child">
+                <span class="icon-large pointer icon-modify" title="编辑" @click.stop.prevent="openModify(o.id)"></span>
+                <span class="icon-large pointer icon-copy" title="复制" @click.stop.prevent="copy(o.id)"></span>
+                <span class="icon-large pointer icon-delete" title="移除项目" @click.stop.prevent="del(o.id)"></span>
+              </div>
+          </span>
         </li>
       </draggable>
     </ul>

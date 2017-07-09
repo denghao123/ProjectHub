@@ -4,7 +4,20 @@ const ipcMain=electron.ipcMain
 const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
-let mainWindow
+let mainWindow;
+
+
+app.on('ready', createWindow);
+
+ipcMain.on('min-window', () => {
+    mainWindow.minimize();
+});
+
+ipcMain.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+});
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -19,19 +32,7 @@ function createWindow() {
     slashes: true
   }))
 
-  mainWindow.on('closed', function() {
-    mainWindow = null
+  mainWindow.on('closed', function(v) {
+    mainWindow = null;
   })
 }
-
-app.on('ready', createWindow)
-
-ipcMain.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-});
-
-ipcMain.on('min-window', () => {
-    mainWindow.minimize();
-});

@@ -40,7 +40,7 @@ var vm = new Vue({
       sure: function() {},
       cancel: function() {}
     },
-    drag:{
+    dragger:{
       timer:"",
       move_y:"",
       down_y:"",
@@ -181,7 +181,6 @@ var vm = new Vue({
         }
         this.saveAppData();
       }
-
     },
 
     taskKill(pid) {
@@ -454,7 +453,16 @@ var vm = new Vue({
 
     // window control
     closeWin() {
-      ipcRenderer.send('window-all-closed')
+      let c=this.appData.children||[];
+      for (var i = 0; i < c.length; i++) {
+          this.taskKill(c[i].pid);
+      }
+      this.clearPids();
+      this.saveAppData();
+
+      setTimeout(()=>{
+        ipcRenderer.send('window-all-closed');
+      },100)
     },
 
     minWin() {
@@ -463,13 +471,13 @@ var vm = new Vue({
 
     // drag process
     dragDown(e){
-      this.drag.timer&&clearInterval(this.drag.timer);
+      this.dragger.timer&&clearInterval(this.dragger.timer);
         var box_H=this.$refs.process.offsetHeight;
         var down_y=e.pageY;
 
-        this.drag.timer=setInterval(()=>{
-          if(this.drag.timer){
-            var to_y=down_y-this.drag.move_y+box_H;
+        this.dragger.timer=setInterval(()=>{
+          if(this.dragger.timer){
+            var to_y=down_y-this.dragger.move_y+box_H;
             if (to_y<46) {
               to_y=46
             }else if(to_y>500){
@@ -482,12 +490,12 @@ var vm = new Vue({
 
 
     mouseMove(e){
-      this.drag.move_y=e.pageY;
+      this.dragger.move_y=e.pageY;
     },
 
     dragUp(e){
-      clearInterval(this.drag.timer);
-      this.drag.timer=undefined;
+      clearInterval(this.dragger.timer);
+      this.dragger.timer=undefined;
     },
 
 
