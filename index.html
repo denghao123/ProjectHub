@@ -7,6 +7,7 @@
 <title>ProjectHub 前端项目集成工具</title>
 <link rel="stylesheet" type="text/css" href="./src/css/style.css">
 <meta name="author" content="DH">
+<meta name="author" content="http://denghao.me">
 </head>
 <body>
 <div id="app" class='app' @mousemove.stop="mouseMove" @mouseup.stop.prevent="dragUp">
@@ -31,7 +32,7 @@
           <span class="other-cmd">
               <span v-for="item in o.otherCommand" :title="item.name" @click.stop.prevent="task(o.id,o.filePath,item.command)">{{item.name}}</span>
           </span>
-          <!-- <span class="icon-large pointer icon-folder" title="打开文件位置" @click.stop.prevent="openFolder(o.filePath)"></span> -->
+          <span class="icon-large pointer icon-cmd" title="cmd" @click.stop.prevent="openCmd(o.filePath)"></span>
           <span class="icon-large pointer icon-play" title="运行" @click.stop.prevent="task(o.id,o.filePath,o.cmd_dev)"></span>
           <span class="icon-large pointer icon-kill" title="停止" @click.stop.prevent="close(o.id)"></span>
           <span class="icon-large pointer icon-package" title="打包" @click.stop.prevent="task(o.id,o.filePath,o.cmd_build)"></span>
@@ -147,7 +148,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 </body>

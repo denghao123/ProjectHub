@@ -16,8 +16,10 @@
 [[官网下载]](http://denghao.me/index.php/archives/ProjectHub.html)
 
 ### 更新日志/updates
-###### 2017.7.9 更新：
-- edit: 界面交互优化 
+###### 2017.7.12 更新：
+- add: 添加独立cmd入口 
+- add: 退出主程序时，结束所有子进程
+- edit: 交互优化
 
 ###### 2017.7.8 更新：
 - add: 定时清除log 

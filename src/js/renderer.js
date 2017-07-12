@@ -40,14 +40,14 @@ var vm = new Vue({
       sure: function() {},
       cancel: function() {}
     },
-    dragger:{
-      timer:"",
-      move_y:"",
-      down_y:"",
-      to_y:""
+    dragger: {
+      timer: "",
+      move_y: "",
+      down_y: "",
+      to_y: ""
     },
-    clearTimer:"",
-    time:""
+    clearTimer: "",
+    time: ""
   },
   mounted() {
     var _this = this;
@@ -392,19 +392,19 @@ var vm = new Vue({
     },
 
     clearProcessInfo(type) {
-      this.clearTimer&&clearInterval(this.clearTimer);
-      this.time=60;
+      this.clearTimer && clearInterval(this.clearTimer);
+      this.time = 100;
       if (type) {
-        this.clearTimer=setInterval(()=>{
-          if (this.time==0) {
+        this.clearTimer = setInterval(() => {
+          if (this.time == 0) {
             this.processData = '';
-            this.time=60;
-          }else{
+            this.time = 100;
+          } else {
             this.time--;
           }
-        },1000)
-      }else{
-        this.time=60;
+        }, 1000)
+      } else {
+        this.time = 100;
         this.processData = '';
         this.clearProcessInfo(true);
       }
@@ -453,16 +453,16 @@ var vm = new Vue({
 
     // window control
     closeWin() {
-      let c=this.appData.children||[];
+      let c = this.appData.children || [];
       for (var i = 0; i < c.length; i++) {
-          this.taskKill(c[i].pid);
+        this.taskKill(c[i].pid);
       }
       this.clearPids();
       this.saveAppData();
 
-      setTimeout(()=>{
+      setTimeout(() => {
         ipcRenderer.send('window-all-closed');
-      },100)
+      }, 100)
     },
 
     minWin() {
@@ -470,32 +470,32 @@ var vm = new Vue({
     },
 
     // drag process
-    dragDown(e){
-      this.dragger.timer&&clearInterval(this.dragger.timer);
-        var box_H=this.$refs.process.offsetHeight;
-        var down_y=e.pageY;
+    dragDown(e) {
+      this.dragger.timer && clearInterval(this.dragger.timer);
+      var box_H = this.$refs.process.offsetHeight;
+      var down_y = e.pageY;
 
-        this.dragger.timer=setInterval(()=>{
-          if(this.dragger.timer){
-            var to_y=down_y-this.dragger.move_y+box_H;
-            if (to_y<46) {
-              to_y=46
-            }else if(to_y>500){
-              to_y=500
-            }
-            this.$refs.process.style.height=to_y+"px";        
+      this.dragger.timer = setInterval(() => {
+        if (this.dragger.timer) {
+          var to_y = down_y - this.dragger.move_y + box_H;
+          if (to_y < 46) {
+            to_y = 46
+          } else if (to_y > 500) {
+            to_y = 500
           }
-        });
+          this.$refs.process.style.height = to_y + "px";
+        }
+      });
     },
 
 
-    mouseMove(e){
-      this.dragger.move_y=e.pageY;
+    mouseMove(e) {
+      this.dragger.move_y = e.pageY;
     },
 
-    dragUp(e){
+    dragUp(e) {
       clearInterval(this.dragger.timer);
-      this.dragger.timer=undefined;
+      this.dragger.timer = undefined;
     },
 
 
