@@ -1,5 +1,7 @@
 # ProjectHub 前端项目集成工具 
 
+## 注意：项目已停止维护
+
 > 前端项目集中管理的windows桌面应用，基于electron。 ---by [DH](http://denghao.me)
 
 首页截屏:
